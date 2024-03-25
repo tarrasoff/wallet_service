@@ -55,7 +55,7 @@ class WalletServiceTest {
 
         when(walletRepository.findById(inputDto.getId())).thenReturn(Optional.of(existingWallet));
 
-        WalletDto resultDto = walletService.createWallet(inputDto);
+        WalletDto resultDto = walletService.createOrUpdateWallet(inputDto);
 
         verify(walletRepository, times(1)).findById(inputDto.getId());
         verify(walletRepository, times(0)).save(any(Wallet.class));
@@ -80,7 +80,7 @@ class WalletServiceTest {
         when(walletMapper.toDto(savedWallet)).thenReturn(inputDto);
         when(walletRepository.save(any(Wallet.class))).thenReturn(savedWallet);
 
-        WalletDto resultDto = walletService.createWallet(inputDto);
+        WalletDto resultDto = walletService.createOrUpdateWallet(inputDto);
 
         verify(walletRepository, times(1)).findById(inputDto.getId());
         verify(walletRepository, times(1)).save(any(Wallet.class));
