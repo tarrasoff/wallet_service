@@ -60,7 +60,7 @@ class WalletServiceTest {
         verify(walletRepository, times(1)).findById(inputDto.getId());
         verify(walletRepository, times(0)).save(any(Wallet.class));
         assertEquals(existingWallet.getOperationType(), inputDto.getOperationType());
-        assertEquals(existingWallet.getAmount(), inputDto.getAmount());
+        assertEquals(150, existingWallet.getAmount());
         assertEquals(existingWallet.getId(), resultDto.getId());
     }
 

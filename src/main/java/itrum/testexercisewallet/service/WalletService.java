@@ -7,7 +7,10 @@ import itrum.testexercisewallet.mapper.WalletMapper;
 import itrum.testexercisewallet.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -20,14 +23,15 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final WalletMapper walletMapper;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Retryable(retryFor = {OptimisticLockingFailureException.class})
     public WalletDto createWallet(WalletDto walletDto) {
         Optional<Wallet> walletOptional = walletRepository.findById(walletDto.getId());
         if (walletOptional.isPresent()) {
             log.info("Find wallet by id: {}", walletDto.getId());
             Wallet wallet = walletOptional.get();
             wallet.setOperationType(walletDto.getOperationType());
-            wallet.setAmount(walletDto.getAmount());
+            wallet.setAmount(wallet.getAmount() + walletDto.getAmount());
             log.info("Update wallet: {}", wallet);
         } else {
             log.info("Wallet not found");
