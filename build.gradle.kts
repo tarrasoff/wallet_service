@@ -33,7 +33,6 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
-    implementation("org.springframework.retry:spring-retry:2.0.2")
 }
 
 tasks.withType<Test> {

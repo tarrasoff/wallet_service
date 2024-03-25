@@ -27,7 +27,4 @@ public class Wallet {
 
     @Column(name = "amount")
     private Double amount;
-
-    @Version
-    private Long version;
 }

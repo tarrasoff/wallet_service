@@ -21,7 +21,7 @@ public class WalletController {
     @PostMapping
     public WalletDto createWallet(@Valid @RequestBody WalletDto walletDto) {
         log.info("Create walletDto: {}", walletDto);
-        return walletService.createWallet(walletDto);
+        return walletService.createOrUpdateWallet(walletDto);
     }
 
     @GetMapping("{walletId}")

@@ -5,12 +5,10 @@ import itrum.testexercisewallet.entity.Wallet;
 import itrum.testexercisewallet.exception.EntityNotFoundException;
 import itrum.testexercisewallet.mapper.WalletMapper;
 import itrum.testexercisewallet.repository.WalletRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -23,9 +21,8 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final WalletMapper walletMapper;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @Retryable(retryFor = {OptimisticLockingFailureException.class})
-    public WalletDto createWallet(WalletDto walletDto) {
+    @Transactional
+    public WalletDto createOrUpdateWallet(WalletDto walletDto) {
         Optional<Wallet> walletOptional = walletRepository.findById(walletDto.getId());
         if (walletOptional.isPresent()) {
             log.info("Find wallet by id: {}", walletDto.getId());
